@@ -44,10 +44,6 @@ class Container extends React.Component {
               <Icon type="team" />
               <span>Groups</span>
             </Menu.Item>
-            <Menu.Item> 
-              <Icon type="user" />
-              <span>Users</span>
-            </Menu.Item>
           </Menu>
         </Sider>
         <Layout>
