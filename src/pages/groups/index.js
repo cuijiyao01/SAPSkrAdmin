@@ -5,6 +5,7 @@ import { Table, Button, Input, Icon, Popconfirm, Form, message} from 'antd';
 import reqwest from 'reqwest';
 import Highlighter from 'react-highlight-words';
 import WrappedEditableCell from './editableCell';
+import UserModal from './Modal/userModal';
 
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
@@ -26,7 +27,12 @@ class EditableTable extends React.Component {
       loading: false,
       searchText: '',
       sorter: {},
-      editingId: null
+      editingId: null,
+      allUserData: [],
+      userData: [],
+      userModalVisible: false,
+      openGroupId: null,
+      modalType: ''
     };
 
     this.columns = [{
@@ -73,15 +79,21 @@ class EditableTable extends React.Component {
           ) : (
             this.state.groupData.length >= 1 && !this.state.editingId
             ? (
+              <div>
               <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.id)}>
-                <Icon type="delete"/>
+                <Icon type="delete"/>             
               </Popconfirm>
+              <Icon type="user-add" className="editIcon" onClick={() => this.handleAddUser(record.id)}/>
+              <Icon type="user-delete" className="editIcon" onClick={() => this.handleRemoveUser(record.id)}/>
+              </div>
             ) : <Icon type="delete" style={{ color: "#d9d9d9" }}/>
+            
           )}
         </div>
         );
       },
     }];
+    this.fetchAllUsers();
   }
 
 
@@ -275,6 +287,90 @@ class EditableTable extends React.Component {
     });
   }
 
+  handleUserChange = () => {
+    this.fetchAllGroup();
+  }
+
+  handleModalVisible = () => {
+    this.setState({userModalVisible: false});
+  }
+
+  handleAddUser = (id) => {
+    this.setState({ loading: true, openGroupId: id});
+    reqwest({
+      url: 'https://sfmooc-api.techtuesday.club' + '/group/listUser/' + id,
+      method: 'get',
+      type: 'json'
+    }).then((data) => {
+      const userNotIn = [];
+      const allUser = this.state.allUserData;
+      for (var i=0; i < allUser.length; i++){
+        for (var j=0; j < data.length; j++){
+          if (allUser[i].id == data[j].id){
+            break;
+          } 
+          if(j == data.length - 1 ){
+              userNotIn.push(allUser[i]);
+          }
+        }
+      }
+      console.log('users not in group data: ', userNotIn);
+      this.setState({ 
+        loading: false,
+        userModalVisible: true, 
+        userData: userNotIn,
+        modalType: 'Add'
+      });
+        
+    }).fail((err, msg) => {
+      message.error('fetch users in group failed!');
+      this.setState({ loading: false });
+    });
+  }
+
+  handleRemoveUser = (id) => {
+    this.setState({ loading: true, openGroupId: id});
+    reqwest({
+      url: 'https://sfmooc-api.techtuesday.club' + '/group/listUser/' + id,
+      method: 'get',
+      type: 'json'
+    }).then((data) => {
+      console.log('group users data: ', data);
+      this.setState({ 
+        loading: false,
+        userModalVisible: true, 
+        userData: data,
+        modalType: 'Remove'
+      });
+    }).fail((err, msg) => {
+      message.error('fetch users in group failed!');
+      this.setState({ loading: false });
+    });
+  }
+
+  fetchAllUsers = (params = {}) => {
+    this.setState({ loading: true });
+    const userParams = {pageNum:1, pageSize: 1000};
+    reqwest({
+      url: 'https://sfmooc-api.techtuesday.club' + '/user/all',
+      data: JSON.stringify(userParams),
+      method: 'post',
+      type: 'json',
+      contentType: 'application/json',
+      // crossOrigin: true
+    }).then((data) => {
+      console.log('all user data: ', data.retObj);
+      this.setState({
+        loading: false,
+        allUserData: data.retObj
+      });
+    }).fail((err, msg) => {
+      message.error('fetch users failed!');
+      this.setState({ loading: false });
+    });
+  }
+
+
   render() {
     const components = {
       body: {
@@ -322,6 +418,7 @@ class EditableTable extends React.Component {
           loading={this.state.loading}
           onChange={this.handleTableChange}
         />
+        <UserModal visible={this.state.userModalVisible} userList={this.state.userData} modalType={this.state.modalType} groupId={this.state.openGroupId} handleUserChange={this.handleUserChange} handleModalVisible={this.handleModalVisible}/>
       </div>
     );
   }
