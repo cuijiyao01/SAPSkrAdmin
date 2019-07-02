@@ -305,15 +305,10 @@ class EditableTable extends React.Component {
       const userNotIn = [];
       const allUser = this.state.allUserData;
       for (var i=0; i < allUser.length; i++){
-        for (var j=0; j < data.length; j++){
-          if (allUser[i].id == data[j].id){
-            break;
-          } 
-          if(j == data.length - 1 ){
-              userNotIn.push(allUser[i]);
-          }
+        if(!this.isUserInGroup(data, allUser[i])){
+          userNotIn.push(allUser[i]);
         }
-      }
+      };
       console.log('users not in group data: ', userNotIn);
       this.setState({ 
         loading: false,
@@ -326,6 +321,15 @@ class EditableTable extends React.Component {
       message.error('fetch users in group failed!');
       this.setState({ loading: false });
     });
+  }
+
+  isUserInGroup = (users, user) => {
+    for(var i = 0; i < users.length; i++){
+      if(users[i].id === user.id){
+        return true;
+      }
+    }
+    return false;
   }
 
   handleRemoveUser = (id) => {
