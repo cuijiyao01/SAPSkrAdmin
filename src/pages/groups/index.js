@@ -305,7 +305,7 @@ class EditableTable extends React.Component {
       const userNotIn = [];
       const allUser = this.state.allUserData;
       for (var i=0; i < allUser.length; i++){
-        if(!this.isUserInGroup(data, allUser[i].id)){
+        if(!this.isUserInGroup(data, allUser[i])){
           userNotIn.push(allUser[i]);
         }
       };
@@ -323,9 +323,9 @@ class EditableTable extends React.Component {
     });
   }
 
-  isUserInGroup = (users, userId) => {
+  isUserInGroup = (users, user) => {
     for(var i = 0; i < users.length; i++){
-      if(users[i].id === userId){
+      if(users[i].id === user.id){
         return true;
       }
     }
