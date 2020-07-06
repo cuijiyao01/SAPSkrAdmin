@@ -92,7 +92,7 @@ class UserModal extends React.Component {
           "groupId":groupId
         };
         reqwest({
-          url: 'https://sfmooc-api.techtuesday.club' + '/group/join',
+          url: 'https://tc-api.techtuesday.club' + '/group/join',
           data: JSON.stringify(userAdd),
           method: 'post',
           type: 'json',
@@ -125,7 +125,7 @@ class UserModal extends React.Component {
         "groupId":groupId
       };
       reqwest({
-        url: 'https://sfmooc-api.techtuesday.club' + '/group/leave',
+        url: 'https://tc-api.techtuesday.club' + '/group/leave',
         data: JSON.stringify(userRemove),
         method: 'post',
         type: 'json',

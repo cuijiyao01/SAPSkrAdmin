@@ -18,7 +18,7 @@ class NormalLoginForm extends React.Component {
     };
 
     reqwest({
-      url: 'https://sfmooc-api.techtuesday.club/user/admin/login',
+      url: 'https://tc-api.techtuesday.club/user/admin/login',
       data: JSON.stringify(loginInfo),
       method: 'post',
       type: 'json',

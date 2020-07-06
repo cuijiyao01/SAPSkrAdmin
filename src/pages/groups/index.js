@@ -111,7 +111,7 @@ class EditableTable extends React.Component {
       const newGroup = {name: record.name, point: 5};
       reqwest({
         // url: 'http://localhost:8090/group/add',
-        url: 'https://sfmooc-api.techtuesday.club/group/add',
+        url: 'https://tc-api.techtuesday.club/group/add',
         data: JSON.stringify(newGroup),
         method: 'post',
         type: 'json',
@@ -241,7 +241,7 @@ class EditableTable extends React.Component {
     this.setState({ loading: true });
     reqwest({
       // url: 'http://localhost:8090/group/delete/' + id,
-      url: 'https://sfmooc-api.techtuesday.club/group/delete/' + id,
+      url: 'https://tc-api.techtuesday.club/group/delete/' + id,
       method: 'post',
       type: 'json'
     }).then((data) => {
@@ -271,7 +271,7 @@ class EditableTable extends React.Component {
   fetchAllGroup = (params = {}) => {
     this.setState({ loading: true });
     reqwest({
-      url: 'https://sfmooc-api.techtuesday.club/group/listAll',
+      url: 'https://tc-api.techtuesday.club/group/listAll',
       // url: 'http://localhost:8090/group/listAll',
       method: 'get',
       data: {
@@ -298,7 +298,7 @@ class EditableTable extends React.Component {
   handleAddUser = (id) => {
     this.setState({ loading: true, openGroupId: id});
     reqwest({
-      url: 'https://sfmooc-api.techtuesday.club' + '/group/listUser/' + id,
+      url: 'https://tc-api.techtuesday.club' + '/group/listUser/' + id,
       method: 'get',
       type: 'json'
     }).then((data) => {
@@ -335,7 +335,7 @@ class EditableTable extends React.Component {
   handleRemoveUser = (id) => {
     this.setState({ loading: true, openGroupId: id});
     reqwest({
-      url: 'https://sfmooc-api.techtuesday.club' + '/group/listUser/' + id,
+      url: 'https://tc-api.techtuesday.club' + '/group/listUser/' + id,
       method: 'get',
       type: 'json'
     }).then((data) => {
@@ -356,7 +356,7 @@ class EditableTable extends React.Component {
     this.setState({ loading: true });
     const userParams = {pageNum:1, pageSize: 1000};
     reqwest({
-      url: 'https://sfmooc-api.techtuesday.club' + '/user/all',
+      url: 'https://tc-api.techtuesday.club' + '/user/all',
       data: JSON.stringify(userParams),
       method: 'post',
       type: 'json',
