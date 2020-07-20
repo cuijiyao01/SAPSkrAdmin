@@ -3,8 +3,13 @@
   border-radius: 4px;
   padding: 4px 11px;
   height: 28px;
-  }
+}
 
-  .editIcon {
-    padding-left: 10px;
-  }
+.editIcon {
+  padding-left: 10px;
+}
+
+.userImg {
+  height: 20%;
+  padding-right: 10px;
+}

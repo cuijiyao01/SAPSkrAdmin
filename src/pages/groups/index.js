@@ -1,7 +1,8 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
-import { Table, Button, Input, Icon, Popconfirm, Form, message} from 'antd';
+import { Table, Button, Input, Icon, Popconfirm, Form, message } from 'antd';
+import { url } from '../../Constants'
 import reqwest from 'reqwest';
 import Highlighter from 'react-highlight-words';
 import WrappedEditableCell from './editableCell';
@@ -40,56 +41,72 @@ class EditableTable extends React.Component {
       dataIndex: 'name',
       editable: true,
       sorter: (a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1,
-      width: '30%',
+      width: '25%',
       ...this.getColumnSearchProps('name')
     }, {
       title: 'User Count',
       dataIndex: 'userNum',
       sorter: (a, b) => a.userNum - b.userNum,
-      width: '30%',
+      width: '25%',
       editable: false,
+    },
+    {
+      title: 'Group Owner',
+      dataIndex: 'owner',
+      width: '25%',
+      editable: false,
+      render: (text, record) => (
+        <span>
+          <img className='userImg' src={record.owner.avatarUrl} />
+          <text>{record.owner.nickName}</text>
+        </span>
+        // <span>
+        //   <img className='userImg' src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLS42IREPE8KtJQibpqibc0iaUnh7vKaPdC6icTzDMHYVNU4dhWrLNorzo205dOEv4GicTA5jT1hiaRgJVQ/132" />
+        //   <text>想名字真烦</text>
+        // </span>
+      )
     }, {
       title: 'Action',
-      width: '20%',
       editable: false,
       render: (text, record) => {
         const editable = this.isEditing(record);
         return (
           <div>
-          {editable ? (
-            <span>
-              <EditableContext.Consumer>
-                {form => (
-                  <a
-                    href="javascript:;"
-                    onClick={() => this.save(form, record)}
-                    style={{ marginRight: 8 }}
-                  >
-                    Save
-                  </a>
-                )}
-              </EditableContext.Consumer>
-              <Popconfirm
-                title="Sure to cancel?"
-                onConfirm={() => this.cancel(record.id)}
-              >
-                <a>Cancel</a>
-              </Popconfirm>
-            </span>
-          ) : (
-            this.state.groupData.length >= 1 && !this.state.editingId
-            ? (
-              <div>
-              <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.id)}>
-                <Icon type="delete"/>             
-              </Popconfirm>
-              <Icon type="user-add" className="editIcon" onClick={() => this.handleAddUser(record.id)}/>
-              <Icon type="user-delete" className="editIcon" onClick={() => this.handleRemoveUser(record.id)}/>
-              </div>
-            ) : <Icon type="delete" style={{ color: "#d9d9d9" }}/>
-            
-          )}
-        </div>
+            {editable ? (
+              <span>
+                <EditableContext.Consumer>
+                  {form => (
+                    <a
+                      href="javascript:;"
+                      onClick={() => this.save(form, record)}
+                      style={{ marginRight: 8 }}
+                    >
+                      Save
+                    </a>
+                  )}
+                </EditableContext.Consumer>
+                <Popconfirm
+                  title="Sure to cancel?"
+                  onConfirm={() => this.cancel(record.id)}
+                >
+                  <a>Cancel</a>
+                </Popconfirm>
+              </span>
+            ) : (
+                this.state.groupData.length >= 1 && !this.state.editingId
+                  ? (
+                    <div>
+                      <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.id)}>
+                        <Icon type="delete" />
+                      </Popconfirm>
+                      <Icon type="user-add" className="editIcon" onClick={() => this.handleAddUser(record.id)} />
+                      <Icon type="user-delete" className="editIcon" onClick={() => this.handleRemoveUser(record.id)} />
+                      <Icon type="user" className="editIcon" onClick={() => this.handleAssignOwner(record.id)} />
+                    </div>
+                  ) : <Icon type="delete" style={{ color: "#d9d9d9" }} />
+
+              )}
+          </div>
         );
       },
     }];
@@ -108,10 +125,10 @@ class EditableTable extends React.Component {
       if (error) {
         return;
       }
-      const newGroup = {name: record.name, point: 5};
+      const newGroup = { name: record.name, point: 5 };
       reqwest({
         // url: 'http://localhost:8090/group/add',
-        url: 'https://tc-api.techtuesday.club/group/add',
+        url: url + '/group/add',
         data: JSON.stringify(newGroup),
         method: 'post',
         type: 'json',
@@ -127,7 +144,7 @@ class EditableTable extends React.Component {
           newData.splice(index, 1, {
             ...item,
             ...row,
-          }); 
+          });
           this.setState({ groupData: newData, editingId: '' });
         } else {
           newData.push(row);
@@ -151,7 +168,7 @@ class EditableTable extends React.Component {
 
   handleTableChange = (sorter) => {
     this.setState({
-      sorter: {...sorter}
+      sorter: { ...sorter }
     });
   }
 
@@ -159,33 +176,33 @@ class EditableTable extends React.Component {
     filterDropdown: ({
       setSelectedKeys, selectedKeys, confirm, clearFilters,
     }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={node => { this.searchInput = node; }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-          style={{ width: 188, marginBottom: 8, display: 'block' }}
-        />
-        <Button
-          type="primary"
-          onClick={() => this.handleSearch(selectedKeys, confirm)}
-          icon="search"
-          size="small"
-          style={{ width: 90, marginRight: 8 }}
-        >
-          Search
+        <div style={{ padding: 8 }}>
+          <Input
+            ref={node => { this.searchInput = node; }}
+            placeholder={`Search ${dataIndex}`}
+            value={selectedKeys[0]}
+            onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
+            style={{ width: 188, marginBottom: 8, display: 'block' }}
+          />
+          <Button
+            type="primary"
+            onClick={() => this.handleSearch(selectedKeys, confirm)}
+            icon="search"
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Search
         </Button>
-        <Button
-          onClick={() => this.handleReset(clearFilters)}
-          size="small"
-          style={{ width: 90 }}
-        >
-          Reset
+          <Button
+            onClick={() => this.handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
         </Button>
-      </div>
-    ),
+        </div>
+      ),
     filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
     onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
@@ -241,7 +258,7 @@ class EditableTable extends React.Component {
     this.setState({ loading: true });
     reqwest({
       // url: 'http://localhost:8090/group/delete/' + id,
-      url: 'https://tc-api.techtuesday.club/group/delete/' + id,
+      url: url + '/group/delete/' + id,
       method: 'post',
       type: 'json'
     }).then((data) => {
@@ -271,7 +288,7 @@ class EditableTable extends React.Component {
   fetchAllGroup = (params = {}) => {
     this.setState({ loading: true });
     reqwest({
-      url: 'https://tc-api.techtuesday.club/group/listAll',
+      url: url + '/group/listAll',
       // url: 'http://localhost:8090/group/listAll',
       method: 'get',
       data: {
@@ -288,35 +305,40 @@ class EditableTable extends React.Component {
   }
 
   handleUserChange = () => {
+    if (this.state.modalType === 'Assign') {
+      this.setState({
+        userModalVisible: false
+      })
+    }
     this.fetchAllGroup();
   }
 
   handleModalVisible = () => {
-    this.setState({userModalVisible: false});
+    this.setState({ userModalVisible: false });
   }
 
   handleAddUser = (id) => {
-    this.setState({ loading: true, openGroupId: id});
+    this.setState({ loading: true, openGroupId: id });
     reqwest({
-      url: 'https://tc-api.techtuesday.club' + '/group/listUser/' + id,
+      url: url + '' + '/group/listUser/' + id,
       method: 'get',
       type: 'json'
     }).then((data) => {
       const userNotIn = [];
       const allUser = this.state.allUserData;
-      for (var i=0; i < allUser.length; i++){
-        if(!this.isUserInGroup(data, allUser[i])){
+      for (var i = 0; i < allUser.length; i++) {
+        if (!this.isUserInGroup(data, allUser[i])) {
           userNotIn.push(allUser[i]);
         }
       };
       console.log('users not in group data: ', userNotIn);
-      this.setState({ 
+      this.setState({
         loading: false,
-        userModalVisible: true, 
+        userModalVisible: true,
         userData: userNotIn,
         modalType: 'Add'
       });
-        
+
     }).fail((err, msg) => {
       message.error('fetch users in group failed!');
       this.setState({ loading: false });
@@ -324,8 +346,8 @@ class EditableTable extends React.Component {
   }
 
   isUserInGroup = (users, user) => {
-    for(var i = 0; i < users.length; i++){
-      if(users[i].id === user.id){
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].id === user.id) {
         return true;
       }
     }
@@ -333,16 +355,16 @@ class EditableTable extends React.Component {
   }
 
   handleRemoveUser = (id) => {
-    this.setState({ loading: true, openGroupId: id});
+    this.setState({ loading: true, openGroupId: id });
     reqwest({
-      url: 'https://tc-api.techtuesday.club' + '/group/listUser/' + id,
+      url: url + '' + '/group/listUser/' + id,
       method: 'get',
       type: 'json'
     }).then((data) => {
       console.log('group users data: ', data);
-      this.setState({ 
+      this.setState({
         loading: false,
-        userModalVisible: true, 
+        userModalVisible: true,
         userData: data,
         modalType: 'Remove'
       });
@@ -352,11 +374,22 @@ class EditableTable extends React.Component {
     });
   }
 
+  handleAssignOwner = (id) => {
+    this.setState({
+      openGroupId: id,
+      loading: false,
+      userModalVisible: true,
+      userData: this.state.allUserData,
+      modalType: 'Assign'
+    });
+  }
+
+
   fetchAllUsers = (params = {}) => {
     this.setState({ loading: true });
-    const userParams = {pageNum:1, pageSize: 1000};
+    const userParams = { pageNum: 1, pageSize: 1000 };
     reqwest({
-      url: 'https://tc-api.techtuesday.club' + '/user/all',
+      url: url + '' + '/user/all',
       data: JSON.stringify(userParams),
       method: 'post',
       type: 'json',
@@ -391,7 +424,7 @@ class EditableTable extends React.Component {
         ...col,
         onCell: record => ({
           record,
-          dataIndex: col.dataIndex, 
+          dataIndex: col.dataIndex,
           title: col.title,
           handleSave: this.handleSave,
           editable: this.isEditing(record)
@@ -422,11 +455,10 @@ class EditableTable extends React.Component {
           loading={this.state.loading}
           onChange={this.handleTableChange}
         />
-        <UserModal visible={this.state.userModalVisible} userList={this.state.userData} modalType={this.state.modalType} groupId={this.state.openGroupId} handleUserChange={this.handleUserChange} handleModalVisible={this.handleModalVisible}/>
+        <UserModal visible={this.state.userModalVisible} userList={this.state.userData} modalType={this.state.modalType} groupId={this.state.openGroupId} handleUserChange={this.handleUserChange} handleModalVisible={this.handleModalVisible} />
       </div>
     );
   }
 }
 
 export default EditableTable;
-          
