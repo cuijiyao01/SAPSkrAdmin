@@ -149,7 +149,6 @@ class Users extends React.Component {
             }
             const newUser = { nickName: record.nickName };
             reqwest({
-                // url: 'http://localhost:8090/group/add',
                 url: url + '/user/external/edit',
                 data: JSON.stringify(newUser),
                 method: 'post',
@@ -159,20 +158,8 @@ class Users extends React.Component {
 
             }).then((data) => {
                 this.setState({ loading: false });
-                const newData = [...this.state.allUserData];
-                const index = newData.findIndex(item => record.id === item.id);
-                if (index > -1) {
-                    const item = newData[index];
-                    newData.splice(index, 1, {
-                        ...item,
-                        ...row,
-                    });
-                    this.setState({ allUserData: newData, editingId: '' });
-                } else {
-                    newData.push(row);
-                    this.setState({ allUserData: newData, editingId: '' });
-                }
                 message.success('Add User successfully!');
+                this.fetchAllUsers();
             }).fail((err, msg) => {
                 message.error('Add user failed!');
                 this.setState({ loading: false });
@@ -198,26 +185,6 @@ class Users extends React.Component {
             this.setState({ loading: false, editModalVisible: false });
         })
     };
-
-    // onFinish = (values) => {
-    //     const newUser = { id: this.state.editingRecord.id, email: values.email, introduction: values.introduction, gender: values.gender };
-    //     reqwest({
-    //         // url: 'http://localhost:8090/group/add',
-    //         url: url + '/user/external/edit',
-    //         data: JSON.stringify(newUser),
-    //         method: 'post',
-    //         type: 'json',
-    //         contentType: 'application/json',
-    //         crossOrigin: true
-    //     }).then((data) => {
-    //         this.setState({ loading: false });
-    //         message.success('Edit User successfully!');
-    //         this.fetchAllUsers()
-    //     }).fail((err, msg) => {
-    //         message.error('Edit user failed!');
-    //         this.setState({ loading: false });
-    //     })
-    // };
 
     handleTableChange = (sorter) => {
         this.setState({
@@ -385,7 +352,7 @@ class Users extends React.Component {
                         loading={this.state.loading}
                         disabled={!!this.state.editingId}
                     >
-                        Add New
+                        Add New External Speaker
                     </Button>
                 </div>
                 <Table
