@@ -1,8 +1,10 @@
 import React from 'react'
-import { Menu, Icon, Layout } from 'antd'
+import { Menu, Layout } from 'antd'
 import './header.css'
 import history from '../utils/history'
- 
+import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined } from '@ant-design/icons';
+
+
 const { SubMenu } = Menu
 const { Header } = Layout
 
@@ -31,14 +33,10 @@ class Top extends React.Component {
 
   render() {
     return (
-      <Header style={{background: '#fff'}}>
-        <Icon 
-          className="trigger"
-          type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}
-          onClick={this.props.toggle}
-        />
+      <Header style={{ background: '#fff' }}>
+        {this.props.collapsed ? <MenuUnfoldOutlined className="trigger" onClick={this.props.toggle} /> : <MenuFoldOutlined className="trigger" onClick={this.props.toggle} />}
         <Menu mode="horizontal" className="logOut">
-          <SubMenu title={<span><Icon type="user" />{this.state.username}</span>}>
+          <SubMenu title={<span><UserOutlined />{this.state.username}</span>}>
             <Menu.Item key="logOut" onClick={this.handleLogout}>Logout</Menu.Item>
           </SubMenu>
         </Menu>

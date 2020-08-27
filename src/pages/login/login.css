@@ -14,11 +14,11 @@
   text-align: center;
   font-size: 26px;
   font-family: 'cursive';
-    margin-bottom: 3%;
-    font-weight: bold;
+  margin-bottom: 3%;
+  font-weight: bold;
   max-width: 300px;
   margin: 0 auto;
-  color:#1890ff;
+  color: #1890ff;
 }
 
 .login-form {
@@ -30,4 +30,12 @@
 }
 .login-form-button {
   width: 100%;
+}
+
+.login-page .ant-row {
+  display: inline;
+}
+
+.login-page .ant-col:first-child {
+  margin-top: 20px;
 }

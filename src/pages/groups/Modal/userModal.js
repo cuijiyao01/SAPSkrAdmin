@@ -1,5 +1,7 @@
 import React from 'react';
 import { Table, Button, Input, Icon, Popconfirm, Modal, message } from 'antd';
+import { PlusCircleOutlined, MinusCircleOutlined, SmileOutlined, SearchOutlined } from '@ant-design/icons';
+
 import Highlighter from 'react-highlight-words';
 import './userModal.css';
 import reqwest from 'reqwest';
@@ -51,7 +53,7 @@ class UserModal extends React.Component {
           return (
             <div>
               <Popconfirm title="Sure to add into group?" onConfirm={() => this.handleAdd(record.id)}>
-                <Icon type="plus-circle" />
+                <PlusCircleOutlined />
               </Popconfirm>
             </div>
           );
@@ -61,7 +63,7 @@ class UserModal extends React.Component {
           return (
             <div>
               <Popconfirm title="Sure to remove from group?" onConfirm={() => this.handleDelete(record.id)}>
-                <Icon type="minus-circle" />
+                <MinusCircleOutlined />
               </Popconfirm>
             </div>
           );
@@ -70,7 +72,7 @@ class UserModal extends React.Component {
           return (
             <div>
               <Popconfirm title="Sure to assign this user as group owner?" onConfirm={() => this.handleAssign(record.id)}>
-                <Icon type="smile" />
+                <SmileOutlined />
               </Popconfirm>
             </div>
           );
@@ -244,7 +246,7 @@ class UserModal extends React.Component {
             </Button>
         </div>
       ),
-    filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
+    filterIcon: filtered => <SearchOutlined type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
     onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
@@ -275,7 +277,7 @@ class UserModal extends React.Component {
   render() {
     const columns = this.columns;
     return (
-      <Modal title={this.title} visible={this.state.visible} onOk={this.handleClose} onCancel={this.handleClose}>
+      <Modal title={this.title} visible={this.state.visible} onOk={this.handleClose} onCancel={this.handleClose} closable={false} width='600px'>
         <div>
           <Table
             columns={columns}

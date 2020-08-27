@@ -1,14 +1,16 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
-import { Table, Button, Input, Icon, Popconfirm, Form, message } from 'antd';
+import { Table, Button, Input, Popconfirm, message } from 'antd';
+import { Form } from '@ant-design/compatible';
+import { DeleteOutlined, UsergroupAddOutlined, UsergroupDeleteOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+
 import { url } from '../../Constants'
 import reqwest from 'reqwest';
 import Highlighter from 'react-highlight-words';
 import WrappedEditableCell from './editableCell';
 import UserModal from './Modal/userModal';
 
-const FormItem = Form.Item;
 const EditableContext = React.createContext();
 
 const EditableRow = ({ form, index, ...props }) => (
@@ -57,8 +59,9 @@ class EditableTable extends React.Component {
       editable: false,
       render: (text, record) => (
         <span>
-          <img className='userImg' src={record.owner.avatarUrl} />
-          <text>{record.owner.nickName}</text>
+          {record.owner ? (<><img className='userImg' src={record.owner.avatarUrl} />
+            <text>{record.owner.nickName}</text></>) : ''}
+
         </span>
         // <span>
         //   <img className='userImg' src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLS42IREPE8KtJQibpqibc0iaUnh7vKaPdC6icTzDMHYVNU4dhWrLNorzo205dOEv4GicTA5jT1hiaRgJVQ/132" />
@@ -97,13 +100,13 @@ class EditableTable extends React.Component {
                   ? (
                     <div>
                       <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.id)}>
-                        <Icon type="delete" />
+                        <DeleteOutlined />
                       </Popconfirm>
-                      <Icon type="user-add" className="editIcon" onClick={() => this.handleAddUser(record.id)} />
-                      <Icon type="user-delete" className="editIcon" onClick={() => this.handleRemoveUser(record.id)} />
-                      <Icon type="user" className="editIcon" onClick={() => this.handleAssignOwner(record.id)} />
+                      <UsergroupAddOutlined className="editIcon" onClick={() => this.handleAddUser(record.id)} />
+                      <UsergroupDeleteOutlined className="editIcon" onClick={() => this.handleRemoveUser(record.id)} />
+                      <UserOutlined className="editIcon" onClick={() => this.handleAssignOwner(record.id)} />
                     </div>
-                  ) : <Icon type="delete" style={{ color: "#d9d9d9" }} />
+                  ) : <DeleteOutlined style={{ color: "#d9d9d9" }} />
 
               )}
           </div>
@@ -188,7 +191,6 @@ class EditableTable extends React.Component {
           <Button
             type="primary"
             onClick={() => this.handleSearch(selectedKeys, confirm)}
-            icon="search"
             size="small"
             style={{ width: 90, marginRight: 8 }}
           >
@@ -203,7 +205,7 @@ class EditableTable extends React.Component {
         </Button>
         </div>
       ),
-    filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
+    filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
     onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
@@ -436,13 +438,12 @@ class EditableTable extends React.Component {
       <div>
         <div style={{ margin: 16 }}>
           <Button
-            icon="plus"
             type="primary"
             onClick={this.handleAddGroup}
             loading={this.state.loading}
             disabled={!!this.state.editingId}
           >
-            New
+            Add New
           </Button>
         </div>
         <Table

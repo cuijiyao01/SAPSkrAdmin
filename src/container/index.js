@@ -1,8 +1,11 @@
 import React from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu } from 'antd';
 import Top from './header';
 import Contents from './content.js';
 import './index.css';
+import history from '../utils/history';
+import { SmileTwoTone, UserOutlined, TeamOutlined } from '@ant-design/icons';
+
 
 const {
   Content, Footer, Sider,
@@ -11,7 +14,17 @@ const {
 class Container extends React.Component {
   state = {
     collapsed: false,
+    selectedTab: 'tab_1'
   };
+
+  componentDidMount = () => {
+    if (history.location.pathname.split('/').length === 3 && history.location.pathname.split('/')[2] === 'users') {
+      this.setState({
+        selectedTab: 'tab_2'
+      })
+    }
+
+  }
 
   onCollapse = (collapsed) => {
     console.log(collapsed);
@@ -25,7 +38,17 @@ class Container extends React.Component {
       mode: collapsed ? 'inline' : 'vertical',
     })
   }
-  
+
+  onTabChange = (event) => {
+    this.setState({ selectedTab: event.key });
+    if (event.key === 'tab_1') {
+      history.push('/content/groups');
+    } else if (event.key === 'tab_2') {
+      history.push('/content/users');
+    }
+
+  }
+
   render() {
     const { collapsed } = this.state
     return (
@@ -36,18 +59,22 @@ class Container extends React.Component {
           onCollapse={this.onCollapse}
         >
           <div>
-            <Icon type="smile" className="logo-icon" theme="twoTone" />
+            <SmileTwoTone className="logo-icon" />
             <span className="logo-name">SAP Skr</span>
           </div>
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" className="menu">
-            <Menu.Item> 
-              <Icon type="team" />
+          <Menu theme="dark" selectedKeys={[this.state.selectedTab]} mode="inline" className="menu" onClick={this.onTabChange}>
+            <Menu.Item key='tab_1'>
+              <TeamOutlined />
               <span>Groups</span>
+            </Menu.Item>
+            <Menu.Item key='tab_2'>
+              <UserOutlined />
+              <span>Users</span>
             </Menu.Item>
           </Menu>
         </Sider>
         <Layout>
-          <Top toggle={this.toggle} collapsed={collapsed} history={this.props.history}/>
+          <Top toggle={this.toggle} collapsed={collapsed} history={this.props.history} />
           <Content style={{ margin: '0 16px' }}>
             <Contents />
           </Content>
