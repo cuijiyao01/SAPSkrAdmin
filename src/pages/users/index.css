@@ -17,3 +17,13 @@
 .ant-table-wrapper {
   margin: 0 16px;
 }
+
+.edituserform .ant-row {
+  margin-top: 25px;
+  vertical-align: middle;
+}
+
+.edituserform .ant-col:first-child {
+  text-align: right;
+  margin-right: 25px;
+}

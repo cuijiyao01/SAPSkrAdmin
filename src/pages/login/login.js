@@ -3,8 +3,11 @@ import 'antd/dist/antd.css';
 import './login.css';
 import reqwest from 'reqwest';
 import {
-  Form, Icon, Input, Button, notification
+  Input, Button, notification
 } from 'antd';
+import { Form } from '@ant-design/compatible';
+
+import { SmileOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
 
 class NormalLoginForm extends React.Component {
 
@@ -38,7 +41,7 @@ class NormalLoginForm extends React.Component {
     notification[type]({
       message: 'Incorrect username or password! Please try again.',
       duration: 6,
-      icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
+      icon: <SmileOutlined style={{ color: '#108ee9' }} />,
     })
   }
 
@@ -46,30 +49,30 @@ class NormalLoginForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <div className="login-page">
-      <div className="login-box">
-        <p className="login-welcome">Welcome to the SAP Skr</p>
-        <Form onSubmit={this.handleSubmit} className="login-form">
-        <Form.Item>
-          {getFieldDecorator('userName', {
-            rules: [{ required: true, message: 'Please input your username!' }],
-          })(
-            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
-          )}
-        </Form.Item>
-        <Form.Item>
-          {getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Please input your Password!' }],
-          })(
-            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
-          )}
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-form-button">
-            Log in
-          </Button>
-        </Form.Item>
-      </Form>
-      </div>
+        <div className="login-box">
+          <p className="login-welcome">Welcome to the SAP Skr</p>
+          <Form onSubmit={this.handleSubmit} className="login-form">
+            <Form.Item >
+              {getFieldDecorator('userName', {
+                rules: [{ required: true, message: 'Please input your username!' }],
+              })(
+                <Input prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
+              )}
+            </Form.Item>
+            <Form.Item>
+              {getFieldDecorator('password', {
+                rules: [{ required: true, message: 'Please input your Password!' }],
+              })(
+                <Input prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+              )}
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" className="login-form-button">
+                Log in
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
       </div>
 
 

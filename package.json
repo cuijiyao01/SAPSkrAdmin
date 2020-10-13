@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.16.6",
+    "antd": "^4.2.5",
+    "@ant-design/icons": "^4.0.6",
+    "@ant-design/compatible": "^1.0.2",
     "babel-plugin-import": "^1.11.0",
     "customize-cra": "^0.2.12",
     "history": "^4.9.0",

@@ -1,7 +1,9 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
-import { Input, Form } from 'antd';
+import { Input } from 'antd';
+import { Form } from '@ant-design/compatible';
+
 
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
@@ -69,14 +71,14 @@ class EditableCell extends React.Component {
                     )}
                   </FormItem>
                 ) : (
-                  <div
-                    className="editable-cell-value-wrap"
-                    style={{ paddingRight: 24 }}
-                    onClick={this.toggleEdit}
-                  >
-                    {restProps.children}
-                  </div>
-                )
+                    <div
+                      className="editable-cell-value-wrap"
+                      style={{ paddingRight: 24 }}
+                      onClick={this.toggleEdit}
+                    >
+                      {restProps.children}
+                    </div>
+                  )
               );
             }}
           </EditableContext.Consumer>
