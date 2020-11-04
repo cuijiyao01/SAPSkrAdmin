@@ -8,6 +8,7 @@ import {
 import { Form } from '@ant-design/compatible';
 
 import { SmileOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
+import { url } from '../../Constants';
 
 class NormalLoginForm extends React.Component {
 
@@ -19,9 +20,8 @@ class NormalLoginForm extends React.Component {
       username: getFieldsValue().userName,
       password: getFieldsValue().password
     };
-
     reqwest({
-      url: 'https://tc-api.techtuesday.club/user/admin/login',
+      url: url + '/user/admin/login',
       data: JSON.stringify(loginInfo),
       method: 'post',
       type: 'json',
@@ -30,6 +30,7 @@ class NormalLoginForm extends React.Component {
     }).then((data) => {
       if (data.msg === 'ok') {
         sessionStorage.setItem('authentication', true);
+        localStorage.setItem('jwtToken',data.retObj.token);
         this.props.history.push('/content/groups');
       } else {
         this.openNotificationWithIcon('info');
