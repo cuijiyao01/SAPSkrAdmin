@@ -4,7 +4,7 @@ import { Table, Button, Input, Popconfirm, Modal, message, Select } from 'antd';
 import { SearchOutlined, EditOutlined } from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 
-import { url } from '../../Constants'
+import { url } from '../../Constants';
 import reqwest from 'reqwest';
 import Highlighter from 'react-highlight-words';
 import WrappedEditableCell from './../groups/editableCell';
@@ -148,14 +148,17 @@ class Users extends React.Component {
                 return;
             }
             const newUser = { nickName: record.nickName };
+            const jwtToken = localStorage.getItem('jwtToken');
             reqwest({
                 url: url + '/user/external/edit',
                 data: JSON.stringify(newUser),
                 method: 'post',
                 type: 'json',
+                headers: {
+                  'Authorization': jwtToken
+                },
                 contentType: 'application/json',
                 crossOrigin: true
-
             }).then((data) => {
                 this.setState({ loading: false });
                 message.success('Add User successfully!');
@@ -169,11 +172,15 @@ class Users extends React.Component {
 
     handleEditUser = () => {
         const newUser = { id: this.state.editingRecord.id, nickName: this.state.editingRecord.nickName, email: this.state.editingRecord.email, introduction: this.state.editingRecord.introduction, gender: this.state.editingRecord.gender };
+        const jwtToken = localStorage.getItem('jwtToken');
         reqwest({
             url: url + '/user/external/edit',
             data: JSON.stringify(newUser),
             method: 'post',
             type: 'json',
+            headers: {
+            'Authorization': jwtToken
+        },
             contentType: 'application/json',
             crossOrigin: true
         }).then((data) => {
@@ -291,12 +298,16 @@ class Users extends React.Component {
     fetchAllUsers = (params = {}) => {
         this.setState({ loading: true });
         const userParams = { pageNum: 1, pageSize: 1000 };
+        const jwtToken = localStorage.getItem('jwtToken');
         reqwest({
             url: url + '/user/all',
             data: JSON.stringify(userParams),
             method: 'post',
             type: 'json',
-            contentType: 'application/json',
+            headers: {
+                'Authorization': jwtToken
+            },
+            contentType: 'application/json'
             // crossOrigin: true
         }).then((data) => {
             console.log('all user data: ', data.retObj);

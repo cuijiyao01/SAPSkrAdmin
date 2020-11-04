@@ -117,11 +117,15 @@ class UserModal extends React.Component {
       "userId": id,
       "groupId": groupId
     };
+    const jwtToken = localStorage.getItem('jwtToken');
     reqwest({
       url: url + '/group/join',
       data: JSON.stringify(userAdd),
       method: 'post',
       type: 'json',
+      headers: {
+            'Authorization': jwtToken
+        },
       contentType: 'application/json',
       crossOrigin: true
     }).then((data) => {
@@ -150,11 +154,15 @@ class UserModal extends React.Component {
       "userId": id,
       "groupId": groupId
     };
+    const jwtToken = localStorage.getItem('jwtToken');
     reqwest({
       url: url + '/group/leave',
       data: JSON.stringify(userRemove),
       method: 'post',
       type: 'json',
+      headers: {
+            'Authorization': jwtToken
+        },
       contentType: 'application/json',
       crossOrigin: true
     }).then((data) => {
@@ -177,11 +185,15 @@ class UserModal extends React.Component {
       "ownerId": id,
       "groupId": groupId
     };
+    const jwtToken = localStorage.getItem('jwtToken');
     reqwest({
       url: url + '/group/assignOwner',
       data: JSON.stringify(userAssign),
       method: 'post',
       type: 'json',
+      headers: {
+            'Authorization': jwtToken
+        },
       contentType: 'application/json',
       crossOrigin: true
     }).then((data) => {

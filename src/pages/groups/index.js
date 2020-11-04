@@ -5,7 +5,7 @@ import { Table, Button, Input, Popconfirm, message } from 'antd';
 import { Form } from '@ant-design/compatible';
 import { DeleteOutlined, UsergroupAddOutlined, UsergroupDeleteOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 
-import { url } from '../../Constants'
+import { url } from '../../Constants';
 import reqwest from 'reqwest';
 import Highlighter from 'react-highlight-words';
 import WrappedEditableCell from './editableCell';
@@ -129,12 +129,15 @@ class EditableTable extends React.Component {
         return;
       }
       const newGroup = { name: record.name, point: 5 };
+      const jwtToken = localStorage.getItem('jwtToken');
       reqwest({
-        // url: 'http://localhost:8090/group/add',
         url: url + '/group/add',
         data: JSON.stringify(newGroup),
         method: 'post',
         type: 'json',
+        headers: {
+            'Authorization': jwtToken
+        },
         contentType: 'application/json',
         crossOrigin: true
 
@@ -258,11 +261,14 @@ class EditableTable extends React.Component {
 
   handleDelete = (id) => {
     this.setState({ loading: true });
+    const jwtToken = localStorage.getItem('jwtToken');
     reqwest({
-      // url: 'http://localhost:8090/group/delete/' + id,
       url: url + '/group/delete/' + id,
       method: 'post',
-      type: 'json'
+      type: 'json',
+      headers: {
+          'Authorization': jwtToken
+      }
     }).then((data) => {
       const groupData = [...this.state.groupData];
       this.setState({ groupData: groupData.filter(item => item.id !== id) });
@@ -289,14 +295,17 @@ class EditableTable extends React.Component {
 
   fetchAllGroup = (params = {}) => {
     this.setState({ loading: true });
+    const jwtToken = localStorage.getItem('jwtToken');
     reqwest({
       url: url + '/group/listAll',
-      // url: 'http://localhost:8090/group/listAll',
       method: 'get',
       data: {
         ...params
       },
-      type: 'json'
+      type: 'json',
+      headers: {
+            'Authorization': jwtToken
+        },
     }).then((data) => {
       console.log('all group data: ', data);
       this.setState({
@@ -321,10 +330,14 @@ class EditableTable extends React.Component {
 
   handleAddUser = (id) => {
     this.setState({ loading: true, openGroupId: id });
+    const jwtToken = localStorage.getItem('jwtToken');
     reqwest({
       url: url + '' + '/group/listUser/' + id,
       method: 'get',
-      type: 'json'
+      type: 'json',
+      headers: {
+          'Authorization': jwtToken
+      }
     }).then((data) => {
       const userNotIn = [];
       const allUser = this.state.allUserData;
@@ -358,10 +371,14 @@ class EditableTable extends React.Component {
 
   handleRemoveUser = (id) => {
     this.setState({ loading: true, openGroupId: id });
+    const jwtToken = localStorage.getItem('jwtToken');
     reqwest({
       url: url + '' + '/group/listUser/' + id,
       method: 'get',
-      type: 'json'
+      type: 'json',
+      headers: {
+          'Authorization': jwtToken
+      }
     }).then((data) => {
       console.log('group users data: ', data);
       this.setState({
@@ -390,11 +407,15 @@ class EditableTable extends React.Component {
   fetchAllUsers = (params = {}) => {
     this.setState({ loading: true });
     const userParams = { pageNum: 1, pageSize: 1000 };
+    const jwtToken = localStorage.getItem('jwtToken');
     reqwest({
       url: url + '' + '/user/all',
       data: JSON.stringify(userParams),
       method: 'post',
       type: 'json',
+      headers: {
+            'Authorization': jwtToken
+        },
       contentType: 'application/json',
       // crossOrigin: true
     }).then((data) => {

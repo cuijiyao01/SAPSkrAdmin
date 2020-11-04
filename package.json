@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^4.2.5",
-    "@ant-design/icons": "^4.0.6",
     "@ant-design/compatible": "^1.0.2",
+    "@ant-design/icons": "^4.0.6",
+    "antd": "^4.2.5",
     "babel-plugin-import": "^1.11.0",
     "customize-cra": "^0.2.12",
     "history": "^4.9.0",
@@ -16,10 +16,11 @@
     "react-dom": "^16.8.6",
     "react-highlight-words": "^0.16.0",
     "react-loadable": "^5.5.0",
-    "react-router": "^5.0.0",
-    "react-router-dom": "^5.0.0",
-    "react-scripts": "3.0.0",
-    "reqwest": "^2.0.5"
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^4.0.0",
+    "reqwest": "^2.0.5",
+    "whatwg-fetch": "^3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
