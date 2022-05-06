@@ -297,7 +297,7 @@ class Users extends React.Component {
 
     fetchAllUsers = (params = {}) => {
         this.setState({ loading: true });
-        const userParams = { pageNum: 1, pageSize: 1000 };
+        const userParams = { pageNum: 1, pageSize: 20000 };
         const jwtToken = localStorage.getItem('jwtToken');
         reqwest({
             url: url + '/user/all',
